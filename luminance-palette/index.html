@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <link href="/static/styles.css" rel="stylesheet">
+        <script src="https://unpkg.com/culori"></script>
+        <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css"/>
+
+        <script src="/static/script.js"></script>
+
+        <title>Colors</title>
+    </head>
+    <body>
+        <header>
+            <h1>Generate Luminance Palettes</h1>
+            <p>Generate a set of colors with the same relative luminance (brightness).</p>
+            <p>We recommend using the oklch results rather than converting back to hex because it offers more colors than hex supports.</p>
+        </header>
+        <div id="formContainer">
+            <div id="color-input-form">
+                <div id="hex-picker">
+                    <label>Choose a color</label>
+                </div>
+            </div>
+            <div id="inputColorContainer">
+                <label>Lightness</label>
+                <input type="number" min="0.00" max="1.00" step="0.01" id="input-l">
+                <div class="secondary-label">values from 0–1, 0 being the darkest</div>
+                
+                <label>Chroma (Saturation)</label>
+                <input type="number" min="0.00" max="0.34" step="0.01" id="input-c">
+                <div class="secondary-label">values from 0–0.34</div>
+                
+                <label>Hue</label>
+                <input type="number" min="0" max="360" step="1" id="input-h">
+                <div class="secondary-label">values from 0–360</div>
+            </div>
+            <div id="previewSwatchContainer"></div>
+        </div>
+
+        <div id="palettesContainer"></div>
+
+    </body>
+</html>

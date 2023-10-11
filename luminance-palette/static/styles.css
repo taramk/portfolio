@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@400;600&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 2rem;
+}
+
+body, input, button {
+    font-family: 'Overpass';
+    font-size: 14px;
+    background-color: #ddd;
+}
+
+input {
+    padding: 0.5rem;
+    border: 1px solid;
+    width: 202px; /* to match width of color picker */
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+h1 {
+    margin: 0;
+}
+
+h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+#formContainer {
+    background-color: #ccc;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+div.color-swatch-card {
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+div.color-swatch {
+    height: 3rem;
+    width: 10rem;
+}
+div.color-swatch-card p {
+    margin-top: 0.25rem;
+}
+#previewSwatchContainer > .color-swatch-card > .color-swatch {
+    height: 12rem;
+    margin-top: 1rem;
+}
+div#inputColorContainer > .color-swatch-card {
+    display: block;
+}
+div#inputColorContainer > input {
+    display: block;
+}
+.secondary-label {
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    opacity: 60%;
+    margin-top: 0.2rem;
+}
+
+#hex-picker {
+    width: 200px;
+}
+
+#hex-picker, #inputColorContainer {
+    margin-right: 5rem;
+}
+#clr-picker, .clr-picker, .clr-default {
+    box-shadow: none !important;
+    border-radius: 0px !important;
+}
+#clr-picker {
+    border: 1px solid #000;
+}
+
+#clr-color-preview {
+    display: none !important;
+}
+
+#clr-color-value {
+    width: 100% !important;
+    margin: 1rem 1rem 0 1rem !important;
+}
+#clr-swatches {
+    margin-top: 1.5rem !important;
+}
