@@ -1,3 +1,4 @@
+
 const defaultColor = "#3F9A46";
 let isUpdatingFromLCH = false;
 
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // when DOM loads, update hex and LCH inputs & generate palettes
     updateLCHInputsFromHex(defaultColor);
-    console.log(defaultColor);
     updatePalettes();
 });
 
@@ -48,7 +48,6 @@ function handleColorPick(hex) {
     } catch (ignore) {
         console.log("could not convert " + hex);
     }
-    console.log("selecting color " + hex);
     updatePalettes();
 }
 
@@ -76,11 +75,9 @@ function updateLCHInputsFromHex(hex) {
             }
         }
     }
-    console.log("updating LCH inputs to " + JSON.stringify(colorObject));
 }
 
 
-// update both the hidden hex input and the visible one
 function updateHexFromLCHInputs() {
     var l_val = Number(document.getElementById("input-l").value);
     var c_val = Number(document.getElementById("input-c").value);
@@ -89,7 +86,6 @@ function updateHexFromLCHInputs() {
     var colorObject = {l:l_val, c:c_val, h:h_val, mode:"oklch"};
     
     var rgb = culori.formatRgb(colorObject);
-    console.log("rgb: " + rgb);
     var hex = culori.formatHex(rgb);
 
     // update color picker hex & trigger event to update picker UI
@@ -129,8 +125,12 @@ function updatePalettes() {
 }
 
 
-function getValidHue(hue) {
-    return (hue + 360) % 360;
+function getValidStep(type, value) {
+    if (type == "hue") {
+        return (value + 360) % 360;
+    } else {
+        return (value + 1) % 1;
+    }
 }
 
 
@@ -141,38 +141,41 @@ function createPalettes(baseColor) {
         tetradic: [0, 90, 180, 270],
         complementary: [0, 180],
         splitComplementary: [0, 150, 210],
-        evenlySpaced: [0, 36, 72, 108, 144, 180, 216, 252, 288, 324]
+        evenlySpaced: [0, 36, 72, 108, 144, 180, 216, 252, 288, 324],
     };
-    const hueShift = [-48, -36, -24, -12, 0, 12, 24, 36, 48];
-    const monochrome = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99].sort().reverse();
     const palettes = {};
     // for each key, map the values by adding the step to the base color.
     for (const type of Object.keys(targetHueSteps)) {
         palettes[type] = targetHueSteps[type].map((step) => ({
             l: baseColor.l,
             c: baseColor.c,
-            h: getValidHue(baseColor.h + step),
+            h: getValidStep("hue", baseColor.h + step),
             mode: "oklch"
         }));
     }
-    // note: this doesn't include the actual color you selected, just other evenly spaced lightnesses.
-    for (step of monochrome) {
-        palettes["monochrome"] = monochrome.map((step) => ({
-            l: step,
+
+    // generate monochrome and hueShift palettes
+    palettes["monochrome"] = [];
+    // palettes["hueShift"] = [];
+    // const hueSteps = [-48, -36, 24, -12, 0, 12, 24, 36, 48];
+    const lightnessSteps = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4];
+    for (let i = 0; i < 9; i++) {
+        // palettes["hueShift"].push({
+        //     l: getValidStep("lightness", baseColor.l + lightnessSteps[i]),
+        //     c: baseColor.c,
+        //     h: getValidStep("hue", baseColor.h + hueSteps[i]),
+        //     mode: "oklch"
+        // })
+        palettes["monochrome"].push({
+            l: getValidStep("lightness", baseColor.l + lightnessSteps[i]),
             c: baseColor.c,
             h: baseColor.h,
             mode: "oklch"
-        }));
+        })
     }
-    palettes["hueShift"] = [];
-    for (let i = 0; i < hueShift.length; i++) {
-        palettes["hueShift"].push({
-            l: monochrome[i],
-            c: baseColor.c,
-            h: getValidHue(baseColor.h + hueShift[i]),
-            mode: "oklch"
-        });
-    }
+    // sort palettes by lightness
+    palettes["monochrome"].sort((a,b)=> (a.l < b.l ? 1 : -1));
+    // palettes["hueShift"].sort((a,b)=> (a.l < b.l ? 1 : -1));
 
     return palettes;
 };
@@ -189,7 +192,7 @@ function formatPaletteStrings(palettes) {
 
 function formatColorObjectToString(colorObject) {
     return `${colorObject.mode}(${colorObject.l.toFixed(2)} ${colorObject.c.toFixed(2)} ${colorObject.h.toFixed(2)})`;
-}
+};
 
 
 function createColorSwatch(colorString) {
