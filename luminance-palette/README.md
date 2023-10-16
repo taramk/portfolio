@@ -1,4 +1,61 @@
-2. 
+
+EXAMPLE FOR HUE SHIFT
+
+https://codepen.io/georgedoescode/pen/gOGaOwm
+
+function adjustHue(val) {
+  if (val < 0) val += Math.ceil(-val / 360) * 360;
+  return val % 360;
+}
+
+function map(n, start1, end1, start2, end2) {
+  return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
+}
+
+function createHueShiftPalette(opts) {
+  const { base, minLightness, maxLightness, hueStep } = opts;
+
+  const palette = [base];
+
+  for (let i = 1; i < 5; i++) {
+    const hueDark = adjustHue(base.h - hueStep * i);
+    const hueLight = adjustHue(base.h + hueStep * i);
+    const lightnessDark = map(i, 0, 4, base.l, minLightness);
+    const lightnessLight = map(i, 0, 4, base.l, maxLightness);
+    const chroma = base.c;
+
+    palette.push({
+      l: lightnessDark,
+      c: chroma,
+      h: hueDark,
+      mode: "lch"
+    });
+
+    palette.unshift({
+      l: lightnessLight,
+      c: chroma,
+      h: hueLight,
+      mode: "lch"
+    });
+  }
+
+  return palette;
+}
+
+
+Pass a base color, min/max lightness, and hue step parameters to a createHueShiftPalette function. The min/max lightness values determine how dark/light our palette will be at either extreme. The step controls how much the hue will shift at each color.
+Store the base color in an array. In the illustration above, this is the middle color. 
+Create a loop that iterates four times. Each iteration, add a darker shade to the start of the array and a lighter tint to the end. Here, we use map to calculate our lightness values — a function that takes a number that usually exists in one range and converts it to another — and increase or decrease the hue using our hueStep variable. Again, adjustHue is used here to ensure all hue values are between 0 and 360.
+Return the palette! 
+
+
+
+
+
+
+
+------------------------------------------------------------------------
+
     1. What this app do, what kind of problem it solves
     2. What tech did you use, which language, framework, database, what did you used to develop front-end part,
     3. List key functionalities, show some use examples if possible
